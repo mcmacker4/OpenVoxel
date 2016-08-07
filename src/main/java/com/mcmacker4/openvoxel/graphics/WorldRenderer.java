@@ -43,7 +43,7 @@ public class WorldRenderer {
         shader.loadViewMatrix(camera.getViewMatrix());
         world.getChunks().forEach(chunk -> {
             Vector3f pos = new Vector3f(chunk.getChunkPosition().x * Chunk.SIZE, 0, chunk.getChunkPosition().y * Chunk.SIZE);
-            shader.loadModelMatrix(new Matrix4f().translate(pos));
+            shader.loadModelMatrix(new Matrix4f().translate(pos.x, 0, pos.z));
             Model model = chunk.getBakedChunk().getModel();
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, Texture.TERRAIN);

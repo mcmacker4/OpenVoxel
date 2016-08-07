@@ -124,8 +124,6 @@ public class BlockFaceData {
             vec.add(x, y);
         });
 
-        System.out.println(texCoords);
-
     }
 
     public LinkedList<Vector3f> getVertices() {

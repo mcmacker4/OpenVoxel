@@ -30,6 +30,8 @@ public class Blocks {
     }
 
     public static Block getById(int id) {
+        if(!blockMap.containsKey(id))
+            return AIR;
         return blockMap.get(id);
     }
 

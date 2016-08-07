@@ -56,12 +56,16 @@ public class Chunk {
     }
 
     public Vector3i toWorldCoordinates(Vector3i vector) {
-        return new Vector3i(chunkPosition.x + vector.x, vector.y, chunkPosition.y + vector.z);
+        return new Vector3i((chunkPosition.x * SIZE) + vector.x, vector.y, (chunkPosition.y * SIZE) + vector.z);
     }
 
     public BakedChunk getBakedChunk() {
         if(hasToBake) bake();
         return bakedChunk;
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public Vector2i getChunkPosition() {

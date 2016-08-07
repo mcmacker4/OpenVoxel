@@ -17,7 +17,7 @@ public class Camera {
     private Vector3f rotation;
 
     private static final float sensitivity = 0.003f;
-    private static final float speed = 0.0002f;
+    private static final float speed = 0.002f;
 
     private Matrix4f projectionMatrix;
 

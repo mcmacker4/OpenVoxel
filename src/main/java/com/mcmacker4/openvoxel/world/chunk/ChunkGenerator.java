@@ -15,7 +15,7 @@ public class ChunkGenerator {
         for(int x = 0; x < Chunk.SIZE; x++) {
             for(int y = 0; y < Chunk.SIZE; y++) {
                 for(int z = 0; z < Chunk.SIZE; z++) {
-                    blocks[x][y][z] = Blocks.GRASS;
+                    blocks[x][y][z] = Blocks.getById((int) (Math.random() * 3) + 1);
                 }
             }
         }

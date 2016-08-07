@@ -7,6 +7,7 @@ import com.mcmacker4.openvoxel.world.block.Block;
 import com.mcmacker4.openvoxel.world.block.Blocks;
 import com.mcmacker4.openvoxel.world.chunk.Chunk;
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
@@ -31,8 +32,14 @@ public class BakedChunk {
                         continue;
                     for(Orientation orientation : Orientation.values()) {
                         Vector3i dir = orientation.getDirection();
+                        Block neighbour;
+                        if(x + dir.x < 0 || x + dir.x >= Chunk.SIZE || z + dir.z < 0 || z + dir.z >= Chunk.SIZE) {
+                            neighbour = chunk.getWorld().getBlockAt(chunk.toWorldCoordinates(new Vector3i(x, y, z).add(dir)));
+                        } else {
+                            neighbour = chunk.getBlockAt(x + dir.x, y + dir.y, z + dir.z);
+                        }
                         //TODO: Check neighbour chunks for face culling.
-                        if(chunk.getBlockAt(x + dir.x, y + dir.y, z + dir.z).getId() == Blocks.AIR.getId()){
+                        if(neighbour.getId() == Blocks.AIR.getId()){
                             faces.add(new BlockFaceData(
                                     new Vector3i(x, y, z),
                                     orientation,
