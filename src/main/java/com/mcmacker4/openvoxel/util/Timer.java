@@ -1,5 +1,7 @@
 package com.mcmacker4.openvoxel.util;
 
+import com.mcmacker4.openvoxel.Display;
+
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 /**
@@ -14,24 +16,20 @@ public class Timer {
     static int frameCount;
     static int FPS;
 
-    static {
-        last = now();
-    }
-
     public static void update() {
-        double now = now();
+        double now = glfwGetTime();
         delta = now - last;
+        last = now;
         if(now - lastFPS > 1) {
             lastFPS = now;
             FPS = frameCount;
             frameCount = 0;
-            System.out.println("FPS: " + FPS);
+            Display.setTitle("FPS: " + FPS);
         }
         frameCount++;
     }
 
-    public static double now() {
-        return glfwGetTime();
+    public static double getDelta() {
+        return delta;
     }
-
 }

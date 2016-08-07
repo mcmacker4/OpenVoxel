@@ -71,4 +71,8 @@ public class Texture {
 
     }
 
+    public static void destroy() {
+        glDeleteTextures(TERRAIN);
+    }
+
 }

@@ -73,6 +73,10 @@ public class Display {
         return glfwWindowShouldClose(window);
     }
 
+    public static void setTitle(String title) {
+        glfwSetWindowTitle(window, title);
+    }
+
     static void update() {
         glfwPollEvents();
         Input.update();
@@ -87,4 +91,5 @@ public class Display {
     public static long getWindow() {
         return window;
     }
+
 }

@@ -38,7 +38,7 @@ class OpenVoxel {
         glClearColor(0.3f, 0.6f, 0.9f, 1.0f);
         Texture.loadTextures();
         worldShader = new WorldShader();
-        World world = new World();
+        world = new World();
         camera = new Camera(90f);
         renderer = new WorldRenderer(world, worldShader, camera);
     }
@@ -53,6 +53,8 @@ class OpenVoxel {
     }
 
     private void destroy() {
+        world.delete();
+        Texture.destroy();
         Display.destroy();
     }
 

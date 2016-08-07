@@ -4,7 +4,7 @@ import com.mcmacker4.openvoxel.world.block.Block;
 import com.mcmacker4.openvoxel.world.block.Blocks;
 import com.mcmacker4.openvoxel.world.chunk.Chunk;
 import com.mcmacker4.openvoxel.world.chunk.ChunkGenerator;
-import org.joml.Vector2i;
+import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import java.util.LinkedList;
@@ -14,12 +14,20 @@ import java.util.LinkedList;
  */
 public class World {
 
-    LinkedList<Chunk> chunks = new LinkedList<>();
+    private static final int CHUNKS_X = 24, CHUNKS_Y = 4, CHUNKS_Z = 24;
+
+    private LinkedList<Chunk> chunks = new LinkedList<>();
+
+    Vector3f lightDir = new Vector3f(0.4f, -1f, -0.8f);
 
     public World() {
-        chunks.add(ChunkGenerator.generateChunk(new Vector2i(0, 0), this));
-        chunks.add(ChunkGenerator.generateChunk(new Vector2i(0, 1), this));
-        chunks.add(ChunkGenerator.generateChunk(new Vector2i(1, 0), this));
+        for(int i = 0; i < CHUNKS_X; i++) {
+            for(int j = 0; j < CHUNKS_Y; j++) {
+                for(int k = 0; k < CHUNKS_Z; k++) {
+                    chunks.add(ChunkGenerator.generateChunk(new Vector3i(i, j, k), this));
+                }
+            }
+        }
     }
 
     public void update() {
@@ -27,11 +35,10 @@ public class World {
     }
 
     public Block getBlockAt(Vector3i pos) {
-        Vector2i lookingFor = new Vector2i(pos.x / Chunk.SIZE, pos.z / Chunk.SIZE);
-        System.out.println("Block pos: " + pos + " Calculated chunk: " + lookingFor);
+        Vector3i lookingFor = new Vector3i(pos.x / Chunk.SIZE, pos.y / Chunk.SIZE, pos.z / Chunk.SIZE);
         for(Chunk chunk : chunks) {
             if(chunk.getChunkPosition().equals(lookingFor)) {
-                return chunk.getBlockAt(pos.x % Chunk.SIZE, pos.y, pos.z % Chunk.SIZE);
+                return chunk.getBlockAt(pos.x % Chunk.SIZE, pos.y % Chunk.SIZE, pos.z % Chunk.SIZE);
             }
         }
         return Blocks.AIR;
@@ -45,4 +52,13 @@ public class World {
 
     }
 
+    public void delete() {
+        for(Chunk chunk : chunks) {
+            chunk.delete();
+        }
+    }
+
+    public Vector3f getLightDir() {
+        return lightDir;
+    }
 }

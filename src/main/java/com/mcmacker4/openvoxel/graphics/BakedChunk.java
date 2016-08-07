@@ -32,7 +32,7 @@ public class BakedChunk {
                     for(Orientation orientation : Orientation.values()) {
                         Vector3i dir = orientation.getDirection();
                         Block neighbour;
-                        if(x + dir.x < 0 || x + dir.x >= Chunk.SIZE || z + dir.z < 0 || z + dir.z >= Chunk.SIZE) {
+                        if(x + dir.x < 0 || x + dir.x >= Chunk.SIZE || y + dir.y < 0 || y + dir.y >= Chunk.SIZE || z + dir.z < 0 || z + dir.z >= Chunk.SIZE) {
                             neighbour = chunk.getWorld().getBlockAt(chunk.toWorldCoordinates(new Vector3i(x, y, z).add(dir)));
                         } else {
                             neighbour = chunk.getBlockAt(x + dir.x, y + dir.y, z + dir.z);

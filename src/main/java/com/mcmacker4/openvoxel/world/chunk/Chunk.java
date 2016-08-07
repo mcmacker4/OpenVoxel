@@ -4,7 +4,6 @@ import com.mcmacker4.openvoxel.graphics.BakedChunk;
 import com.mcmacker4.openvoxel.world.World;
 import com.mcmacker4.openvoxel.world.block.Block;
 import com.mcmacker4.openvoxel.world.block.Blocks;
-import org.joml.Vector2i;
 import org.joml.Vector3i;
 
 /**
@@ -17,13 +16,13 @@ public class Chunk {
     private Block[][][] blocks = new Block[SIZE][SIZE][SIZE];
     private BakedChunk bakedChunk;
 
-    private Vector2i chunkPosition;
+    private Vector3i chunkPosition;
 
     private World world;
 
     private boolean hasToBake;
 
-    public Chunk(Block[][][] blocks, Vector2i chunkPosition, World world) {
+    public Chunk(Block[][][] blocks, Vector3i chunkPosition, World world) {
         this.blocks = blocks;
         this.chunkPosition = chunkPosition;
         this.world = world;
@@ -55,7 +54,7 @@ public class Chunk {
     }
 
     public Vector3i toWorldCoordinates(Vector3i vector) {
-        return new Vector3i((chunkPosition.x * SIZE) + vector.x, vector.y, (chunkPosition.y * SIZE) + vector.z);
+        return new Vector3i((chunkPosition.x * SIZE) + vector.x, (chunkPosition.y * SIZE) + vector.y, (chunkPosition.z * SIZE) + vector.z);
     }
 
     public BakedChunk getBakedChunk() {
@@ -63,12 +62,20 @@ public class Chunk {
         return bakedChunk;
     }
 
+    public void markForBaking() {
+        this.hasToBake = true;
+    }
+
     public World getWorld() {
         return world;
     }
 
-    public Vector2i getChunkPosition() {
+    public Vector3i getChunkPosition() {
         return chunkPosition;
+    }
+
+    public void delete() {
+        bakedChunk.delete();
     }
 
 }

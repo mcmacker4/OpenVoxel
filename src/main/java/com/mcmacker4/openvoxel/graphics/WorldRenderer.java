@@ -29,9 +29,6 @@ public class WorldRenderer {
         this.world = world;
         this.shader = shader;
         this.camera = camera;
-        shader.start();
-        shader.loadProjectionMatrix(camera.getProjectionMatrix());
-        ShaderProgram.stop();
     }
 
     public void setCamera(Camera camera) {
@@ -40,10 +37,16 @@ public class WorldRenderer {
 
     public void render() {
         shader.start();
+        shader.loadProjectionMatrix(camera.getProjectionMatrix());
         shader.loadViewMatrix(camera.getViewMatrix());
+        shader.loadLightDir(world.getLightDir());
         world.getChunks().forEach(chunk -> {
-            Vector3f pos = new Vector3f(chunk.getChunkPosition().x * Chunk.SIZE, 0, chunk.getChunkPosition().y * Chunk.SIZE);
-            shader.loadModelMatrix(new Matrix4f().translate(pos.x, 0, pos.z));
+            Vector3f pos = new Vector3f(
+                    chunk.getChunkPosition().x * Chunk.SIZE,
+                    chunk.getChunkPosition().y * Chunk.SIZE,
+                    chunk.getChunkPosition().z * Chunk.SIZE
+            );
+            shader.loadModelMatrix(new Matrix4f().translate(pos.x, pos.y, pos.z));
             Model model = chunk.getBakedChunk().getModel();
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, Texture.TERRAIN);

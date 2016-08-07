@@ -10,7 +10,14 @@ public class Block {
     private int id;
     private int textureIDs[];
 
+    /*
+    textureIDs[] should be an array of size 6 with the textureID of each texture for each face.
+    The index -> face mapping is done using Orientation.id. Each id represents each face of the cube
+    from 0 to 5.
+     */
     Block(int id, int textureIDs[]) {
+        if(textureIDs.length != 6)
+            throw new IllegalArgumentException("Argument textureIDs should be of size 6. It is not.");
         this.id = id;
         this.textureIDs = textureIDs;
     }

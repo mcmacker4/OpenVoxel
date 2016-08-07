@@ -2,6 +2,7 @@ package com.mcmacker4.openvoxel.graphics;
 
 import com.mcmacker4.openvoxel.Display;
 import com.mcmacker4.openvoxel.Input;
+import com.mcmacker4.openvoxel.util.Timer;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -17,14 +18,14 @@ public class Camera {
     private Vector3f rotation;
 
     private static final float sensitivity = 0.003f;
-    private static final float speed = 0.002f;
+    private static final float speed = 15f;
 
     private Matrix4f projectionMatrix;
 
     public Camera(float fov) {
         position = new Vector3f();
         rotation = new Vector3f();
-        projectionMatrix = new Matrix4f().setPerspective((float) Math.toRadians(fov), Display.aspectRatio(), 0.1f, 100f);
+        projectionMatrix = new Matrix4f().setPerspective((float) Math.toRadians(fov), Display.aspectRatio(), 0.1f, 1000f);
     }
 
     float val = 0;
@@ -45,7 +46,7 @@ public class Camera {
             movement.add(new Vector3f(0, 1, 0));
         if(Input.isKeyDown(GLFW_KEY_LEFT_SHIFT))
             movement.add(new Vector3f(0, -1, 0));
-        movement.mul(speed);
+        movement.mul(speed * (float) Timer.getDelta());
         position.add(movement);
     }
 

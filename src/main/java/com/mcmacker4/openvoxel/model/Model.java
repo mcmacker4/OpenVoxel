@@ -14,6 +14,7 @@ public class Model {
 
     Model(int vao, int[] vbos, int vertexCount) {
         this.vao = vao;
+        this.vbos = vbos;
         this.vertexCount = vertexCount;
     }
 
