@@ -2,12 +2,10 @@ package com.mcmacker4.openvoxel;
 
 import com.mcmacker4.openvoxel.graphics.Camera;
 import com.mcmacker4.openvoxel.graphics.WorldRenderer;
-import com.mcmacker4.openvoxel.shaders.ShaderProgram;
 import com.mcmacker4.openvoxel.shaders.WorldShader;
+import com.mcmacker4.openvoxel.texture.Texture;
 import com.mcmacker4.openvoxel.util.Timer;
 import com.mcmacker4.openvoxel.world.World;
-
-import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
 

@@ -1,10 +1,7 @@
 package com.mcmacker4.openvoxel.shaders;
 
-import com.mcmacker4.openvoxel.graphics.Camera;
 import com.mcmacker4.openvoxel.util.FileUtil;
 import org.joml.Matrix4f;
-
-import java.io.File;
 
 /**
  * Created by McMacker4 on 05/08/2016.

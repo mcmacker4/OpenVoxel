@@ -3,7 +3,6 @@ package com.mcmacker4.openvoxel;
 import org.lwjgl.system.MemoryUtil;
 
 import java.nio.DoubleBuffer;
-import java.util.HashMap;
 
 import static org.lwjgl.glfw.GLFW.*;
 

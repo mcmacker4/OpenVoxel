@@ -1,11 +1,11 @@
 package com.mcmacker4.openvoxel.graphics;
 
-import com.mcmacker4.openvoxel.Texture;
 import com.mcmacker4.openvoxel.model.Model;
 import com.mcmacker4.openvoxel.shaders.ShaderProgram;
 import com.mcmacker4.openvoxel.shaders.WorldShader;
-import com.mcmacker4.openvoxel.world.chunk.Chunk;
+import com.mcmacker4.openvoxel.texture.Texture;
 import com.mcmacker4.openvoxel.world.World;
+import com.mcmacker4.openvoxel.world.chunk.Chunk;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 

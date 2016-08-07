@@ -1,8 +1,6 @@
 package com.mcmacker4.openvoxel.util;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 /**
  * Created by McMacker4 on 05/08/2016.

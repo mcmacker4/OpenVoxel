@@ -5,7 +5,6 @@ import com.mcmacker4.openvoxel.world.World;
 import com.mcmacker4.openvoxel.world.block.Block;
 import com.mcmacker4.openvoxel.world.block.Blocks;
 import org.joml.Vector2i;
-import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 /**

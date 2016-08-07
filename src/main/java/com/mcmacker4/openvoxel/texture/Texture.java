@@ -1,4 +1,4 @@
-package com.mcmacker4.openvoxel;
+package com.mcmacker4.openvoxel.texture;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL12;

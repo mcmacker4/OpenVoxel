@@ -4,7 +4,6 @@ import com.mcmacker4.openvoxel.util.Orientation;
 import org.joml.*;
 
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by McMacker4 on 06/08/2016.

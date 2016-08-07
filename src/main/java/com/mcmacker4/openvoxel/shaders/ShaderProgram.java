@@ -1,12 +1,9 @@
 package com.mcmacker4.openvoxel.shaders;
 
-import com.mcmacker4.openvoxel.util.FileUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryUtil;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.GL_TRUE;
