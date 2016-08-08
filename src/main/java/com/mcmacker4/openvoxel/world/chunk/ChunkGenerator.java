@@ -41,11 +41,11 @@ public class ChunkGenerator implements Runnable {
             unloadUnwantedChunks(closestChunk);
             addNecesaryChunks(closestChunk);
             updateChunks();
-//            try {
-//                Thread.sleep(10);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

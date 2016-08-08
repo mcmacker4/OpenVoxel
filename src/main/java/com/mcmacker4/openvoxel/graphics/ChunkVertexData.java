@@ -24,27 +24,31 @@ public class ChunkVertexData {
 
     int[] vbos = new int[3];
     int vertexCount;
+    boolean init = false;
+    public FloatBuffer verticesBuffer;
+    public FloatBuffer texCoordsBuffer;
+    public FloatBuffer normalsBuffer;
 
     public ChunkVertexData(Chunk chunk) {
         Block[][][] blocks = chunk.getBlocks();
         List<BlockFaceData> faces = Lists.newLinkedList();
-        for(int x = 0; x < Chunk.SIZE_X; x++) {
-            for(int y = 0; y < Chunk.SIZE_Y; y++) {
-                for(int z = 0; z < Chunk.SIZE_Z; z++) {
+        for (int x = 0; x < Chunk.SIZE_X; x++) {
+            for (int y = 0; y < Chunk.SIZE_Y; y++) {
+                for (int z = 0; z < Chunk.SIZE_Z; z++) {
                     Block block = blocks[x][y][z];
                     //If block is air, skip it.
-                    if(block.getId() == Blocks.AIR.getId())
+                    if (block.getId() == Blocks.AIR.getId())
                         continue;
-                    for(Orientation orientation : Orientation.values()) {
+                    for (Orientation orientation : Orientation.values()) {
                         Vector3i dir = orientation.getDirection();
                         Block neighbour;
-                        if(x + dir.x < 0 || x + dir.x >= Chunk.SIZE_X || y + dir.y < 0 || y + dir.y >= Chunk.SIZE_Y || z + dir.z < 0 || z + dir.z >= Chunk.SIZE_Z) {
+                        if (x + dir.x < 0 || x + dir.x >= Chunk.SIZE_X || y + dir.y < 0 || y + dir.y >= Chunk.SIZE_Y || z + dir.z < 0 || z + dir.z >= Chunk.SIZE_Z) {
                             neighbour = chunk.getWorld().getBlockAt(chunk.toWorldCoordinates(new Vector3i(x, y, z).add(dir)));
                         } else {
                             neighbour = chunk.getBlockAt(x + dir.x, y + dir.y, z + dir.z);
                         }
                         //TODO: Check neighbour chunks for face culling.
-                        if(neighbour.isTranslucent()) {
+                        if (neighbour.isTranslucent()) {
                             faces.add(new BlockFaceData(
                                     new Vector3i(x, y, z),
                                     orientation,
@@ -64,22 +68,16 @@ public class ChunkVertexData {
             normals.addAll(face.getNormals());
         });
         vertexCount = vertices.size();
-        FloatBuffer verticesBuffer = BufferUtils.floatBuffer(ModelLoader.toFloatArray3(vertices));
-        FloatBuffer texCoordsBuffer = BufferUtils.floatBuffer(ModelLoader.toFloatArray2(texCoords, true));
-        FloatBuffer normalsBuffer = BufferUtils.floatBuffer(ModelLoader.toFloatArray3(normals));
-
-        vbos[0] = createVBO(verticesBuffer);
-        vbos[1] = createVBO(texCoordsBuffer);
-        vbos[2] = createVBO(normalsBuffer);
+        verticesBuffer = BufferUtils.floatBuffer(ModelLoader.toFloatArray3(vertices));
+        texCoordsBuffer = BufferUtils.floatBuffer(ModelLoader.toFloatArray2(texCoords, true));
+        normalsBuffer = BufferUtils.floatBuffer(ModelLoader.toFloatArray3(normals));
 
     }
 
-    private int createVBO(FloatBuffer data) {
+    public int createVBO(FloatBuffer data) {
         int vbo = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, data, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
         return vbo;
     }
-
 }

@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_VERSION;
+import static org.lwjgl.opengl.GL11.glFlush;
 import static org.lwjgl.opengl.GL11.glGetString;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
@@ -86,6 +87,7 @@ public class Display {
     static void update() {
         glfwPollEvents();
         Input.update();
+        glFlush();
         glfwSwapBuffers(window);
     }
 

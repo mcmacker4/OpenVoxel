@@ -24,11 +24,19 @@ public class BakedChunk {
         vertexCount = data.vertexCount;
         vao = glGenVertexArrays();
         glBindVertexArray(vao);
-        for(int i = 0; i < 3; i++) {
-            glBindBuffer(GL_ARRAY_BUFFER, data.vbos[i]);
-            glVertexAttribPointer(i, (i == 1) ? 2 : 3, GL_FLOAT, false, 0, 0);
-        }
+        int id = data.createVBO(data.verticesBuffer);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        id = data.createVBO(data.verticesBuffer);
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        id = data.createVBO(data.verticesBuffer);
+        glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        glBindVertexArray(0);
     }
 
     public int getVao() {

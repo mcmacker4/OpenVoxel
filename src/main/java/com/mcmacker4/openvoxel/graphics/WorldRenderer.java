@@ -1,6 +1,5 @@
 package com.mcmacker4.openvoxel.graphics;
 
-import com.mcmacker4.openvoxel.model.Model;
 import com.mcmacker4.openvoxel.shaders.ShaderProgram;
 import com.mcmacker4.openvoxel.shaders.WorldShader;
 import com.mcmacker4.openvoxel.texture.Texture;
@@ -8,9 +7,6 @@ import com.mcmacker4.openvoxel.world.World;
 import com.mcmacker4.openvoxel.world.chunk.Chunk;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-
-import java.util.Collections;
-import java.util.LinkedList;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
@@ -50,19 +46,26 @@ public class WorldRenderer {
                 if (bakedChunk != null) {
                     glActiveTexture(GL_TEXTURE0);
                     glBindTexture(GL_TEXTURE_2D, Texture.TERRAIN);
+
                     glBindVertexArray(bakedChunk.getVao());
+
                     glEnableVertexAttribArray(0);
                     glEnableVertexAttribArray(1);
                     glEnableVertexAttribArray(2);
+
                     glDrawArrays(GL_TRIANGLES, 0, bakedChunk.getVertexCount());
-                    glBindTexture(GL_TEXTURE_2D, 0);
-                    glDisableVertexAttribArray(0);
-                    glDisableVertexAttribArray(1);
+
                     glDisableVertexAttribArray(2);
+                    glDisableVertexAttribArray(1);
+                    glDisableVertexAttribArray(0);
+
+                    glBindVertexArray(0);
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                    glFlush();
                 }
             });
         }
-        glBindVertexArray(0);
+
         ShaderProgram.stop();
     }
 

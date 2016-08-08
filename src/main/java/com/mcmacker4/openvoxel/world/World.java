@@ -10,7 +10,6 @@ import org.joml.Vector2i;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -35,7 +34,7 @@ public class World {
     }
 
     public void update() {
-
+        Thread.yield();
     }
 
     public void setActiveCamera(Camera camera) {
