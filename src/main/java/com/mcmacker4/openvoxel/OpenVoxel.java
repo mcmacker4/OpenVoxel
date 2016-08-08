@@ -12,7 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * Created by McMacker4 on 05/08/2016.
  */
-class OpenVoxel {
+public class OpenVoxel {
 
     WorldShader worldShader;
     WorldRenderer renderer;
@@ -20,7 +20,7 @@ class OpenVoxel {
 
     Camera camera;
 
-    void start() {
+    public void start() {
         Display.create(1280, 720, "OpenVoxel Project");
         init();
         while(!Display.shouldClose()) {

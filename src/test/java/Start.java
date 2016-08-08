@@ -1,11 +1,14 @@
-package com.mcmacker4.openvoxel;
+import com.mcmacker4.openvoxel.OpenVoxel;
+import org.junit.Test;
 
 /**
  * Created by McMacker4 on 05/08/2016.
  */
+
 public class Start {
 
-    public static void main(String[] args) {
+    @Test
+    public void Run() {
         new OpenVoxel().start();
     }
 
