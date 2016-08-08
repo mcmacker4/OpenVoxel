@@ -4,15 +4,16 @@ import com.mcmacker4.openvoxel.util.Orientation;
 import org.joml.*;
 
 import java.util.LinkedList;
+import java.util.Vector;
 
 /**
  * Created by McMacker4 on 06/08/2016.
  */
 public class BlockFaceData {
 
-    private LinkedList<Vector3f> vertices = new LinkedList<>();
-    private LinkedList<Vector2f> texCoords = new LinkedList<>();
-    private LinkedList<Vector3f> normals = new LinkedList<>();
+    private Vector<Vector3f> vertices = new Vector<>();
+    private Vector<Vector2f> texCoords = new Vector<>();
+    private Vector<Vector3f> normals = new Vector<>();
 
     public BlockFaceData(Vector3i blockPos, Orientation orientation, int textureID) {
         //Vertices according to orientation of the face
@@ -68,7 +69,7 @@ public class BlockFaceData {
             default:
                 throw new IllegalArgumentException("Invalid orientation. How the fuck did you do that?");
         }
-        //Translate all vertices to position
+        //Translate all verticesBuffer to position
         final Matrix4f vertTransform = new Matrix4f().translate(new Vector3f(blockPos.x, blockPos.y, blockPos.z));
         vertices.forEach((vertex) -> {
             Vector4f vec = new Vector4f(vertex, 1f);
@@ -125,15 +126,15 @@ public class BlockFaceData {
 
     }
 
-    public LinkedList<Vector3f> getVertices() {
+    public Vector<Vector3f> getVertices() {
         return vertices;
     }
 
-    public LinkedList<Vector2f> getTexCoords() {
+    public Vector<Vector2f> getTexCoords() {
         return texCoords;
     }
 
-    public LinkedList<Vector3f> getNormals() {
+    public Vector<Vector3f> getNormals() {
         return normals;
     }
 

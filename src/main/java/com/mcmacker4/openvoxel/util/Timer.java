@@ -9,6 +9,7 @@ import static org.lwjgl.glfw.GLFW.glfwGetTime;
  */
 public class Timer {
 
+    static double now;
     static double last;
     static double lastFPS;
     static double delta;
@@ -17,7 +18,7 @@ public class Timer {
     static int FPS;
 
     public static void update() {
-        double now = glfwGetTime();
+        now = glfwGetTime();
         delta = now - last;
         last = now;
         if(now - lastFPS > 1) {
@@ -27,6 +28,10 @@ public class Timer {
             Display.setTitle("FPS: " + FPS);
         }
         frameCount++;
+    }
+
+    public static double getTime() {
+        return now;
     }
 
     public static double getDelta() {

@@ -15,6 +15,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Display {
 
     private static long window;
+    private static long inv_window;
 
     private static int WIDTH, HEIGHT;
 
@@ -38,6 +39,11 @@ public class Display {
         window = glfwCreateWindow(width, height, title, NULL, NULL);
         if(window == 0)
             throw new IllegalStateException("Could not create GLFW Window.");
+
+        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        inv_window = glfwCreateWindow(800, 600, "Invisible", NULL, window);
+        if(inv_window == 0)
+            throw new IllegalStateException("Could not create GLFW context for worker thread.");
 
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         glfwSetWindowPos(
@@ -69,7 +75,7 @@ public class Display {
         return (float) WIDTH / HEIGHT;
     }
 
-    static boolean shouldClose() {
+    public static boolean shouldClose() {
         return glfwWindowShouldClose(window);
     }
 
@@ -84,12 +90,17 @@ public class Display {
     }
 
     static void destroy() {
+        glfwDestroyWindow(inv_window);
         glfwDestroyWindow(window);
         glfwTerminate();
     }
 
     public static long getWindow() {
         return window;
+    }
+
+    public static long getWorkerWindow() {
+        return inv_window;
     }
 
 }

@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 public class Blocks {
 
-    public static Block AIR, STONE, DIRT, GRASS;
+    public static Block AIR, STONE, DIRT, GRASS, MISSING;
 
     private static HashMap<Integer, Block> blockMap = new HashMap<>();
 
@@ -15,10 +15,11 @@ public class Blocks {
 
     static {
         if(!blocksRegistered) {
-            registerBlock(AIR = new Block(0, new int[] {-1, -1, -1, -1, -1, -1}));
+            registerBlock(AIR = new Block(0, new int[] {-1, -1, -1, -1, -1, -1}, true));
             registerBlock(STONE = new Block(1, new int[] {1, 1, 1, 1, 1, 1}));
             registerBlock(DIRT = new Block(2, new int[] {2, 2, 2, 2, 2, 2}));
             registerBlock(GRASS = new Block(3, new int[] {3, 3, 3, 3, 0, 2}));
+            registerBlock(MISSING = new Block(4, new int[] {26, 26, 26, 26, 26, 26}));
             blocksRegistered = true;
         }
     }

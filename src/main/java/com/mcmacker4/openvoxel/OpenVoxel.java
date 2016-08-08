@@ -38,14 +38,15 @@ class OpenVoxel {
         glClearColor(0.3f, 0.6f, 0.9f, 1.0f);
         Texture.loadTextures();
         worldShader = new WorldShader();
-        world = new World();
         camera = new Camera(90f);
-        renderer = new WorldRenderer(world, worldShader, camera);
+        world = new World(camera);
+        renderer = new WorldRenderer(world, worldShader);
     }
 
     private void update() {
         Timer.update();
         camera.update();
+        world.update();
     }
 
     private void render() {
