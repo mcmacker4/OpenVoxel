@@ -4,6 +4,8 @@ import com.mcmacker4.openvoxel.world.World;
 import com.mcmacker4.openvoxel.world.block.Block;
 import com.mcmacker4.openvoxel.world.block.Blocks;
 import com.mcmacker4.openvoxel.world.generation.SimplexNoise;
+import com.mcmacker4.openvoxel.world.generation.SimplexNoise_octave;
+import org.joml.Vector2i;
 import org.joml.Vector3i;
 
 /**
@@ -11,19 +13,23 @@ import org.joml.Vector3i;
  */
 public class ChunkGenerator {
 
-    public static Chunk generateChunk(Vector3i position, World world) {
-        Block[][][] blocks = new Block[Chunk.SIZE][Chunk.SIZE][Chunk.SIZE];
-        for(int x = 0; x < Chunk.SIZE; x++) {
-            for(int y = 0; y < Chunk.SIZE; y++) {
-                for(int z = 0; z < Chunk.SIZE; z++) {
-                    double density = SimplexNoise.noise(
-                            (double) (x + (position.x * Chunk.SIZE)) / 40,
-                            (double) (y + (position.y * Chunk.SIZE)) / 40,
-                            (double) (z + (position.z * Chunk.SIZE)) / 40
-                    );
-                    density += (-(position.y * Chunk.SIZE + y) - 20) / 100;
-                    if(density > 0) blocks[x][y][z] = Blocks.GRASS;
-                    else blocks[x][y][z] = Blocks.AIR;
+    private static SimplexNoise noise = new SimplexNoise(62, 0.2, 0);
+
+    public static Chunk generateChunk(Vector2i position, World world) {
+        Block[][][] blocks = new Block[Chunk.SIZE_X][Chunk.SIZE_Y][Chunk.SIZE_Z];
+        for(int x = 0; x < Chunk.SIZE_X; x++) {
+            for(int z = 0; z < Chunk.SIZE_Z; z++) {
+                for(int y = Chunk.SIZE_Y - 1; y >= 0; y--) {
+                    Vector3i worldPos = new Vector3i(x, y, z).add(new Vector3i(position.x, 0, position.y).mul(Chunk.SIZE_X, Chunk.SIZE_Y, Chunk.SIZE_Z));
+                    int val = (int) (noise.getNoise(worldPos.x, worldPos.y, worldPos.z) * 64 + 70 - worldPos.y);
+                    blocks[x][y][z] = Blocks.AIR;
+                    if(val >= 0) {
+                        if (blocks[x][y+1][z] == Blocks.AIR) {
+                            blocks[x][y][z] = Blocks.GRASS;
+                        } else {
+                            blocks[x][y][z] = Blocks.DIRT;
+                        }
+                    }
                 }
             }
         }

@@ -13,6 +13,7 @@ public class WorldShader extends ShaderProgram {
     private int loc_ViewMatrix;
     private int loc_ModelMatrix;
     private int loc_lightDir;
+    private int loc_ambientLight;
 
     public WorldShader() {
         super(
@@ -27,6 +28,7 @@ public class WorldShader extends ShaderProgram {
         loc_ViewMatrix = getUniformLocation("viewMatrix");
         loc_ModelMatrix = getUniformLocation("modelMatrix");
         loc_lightDir = getUniformLocation("lightDir");
+        loc_ambientLight = getUniformLocation("ambientLight");
     }
 
     public void loadViewMatrix(Matrix4f viewMatrix) {
@@ -43,5 +45,9 @@ public class WorldShader extends ShaderProgram {
 
     public void loadLightDir(Vector3f lightDir) {
         loadVector3f(loc_lightDir, lightDir);
+    }
+
+    public void loadAmbientLight(float value) {
+        loadFloat(loc_ambientLight, value);
     }
 }

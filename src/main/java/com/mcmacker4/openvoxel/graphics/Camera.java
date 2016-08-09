@@ -46,7 +46,7 @@ public class Camera {
             movement.add(new Vector3f(0, 1, 0));
         if(Input.isKeyDown(GLFW_KEY_LEFT_SHIFT))
             movement.add(new Vector3f(0, -1, 0));
-        movement.mul(speed * (float) Timer.getDelta());
+        movement.mul(speed * (float) Timer.getDelta() * (Input.isKeyDown(GLFW_KEY_LEFT_CONTROL) ? 5 : 1));
         position.add(movement);
     }
 

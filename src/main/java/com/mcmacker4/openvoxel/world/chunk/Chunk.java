@@ -4,6 +4,7 @@ import com.mcmacker4.openvoxel.graphics.BakedChunk;
 import com.mcmacker4.openvoxel.world.World;
 import com.mcmacker4.openvoxel.world.block.Block;
 import com.mcmacker4.openvoxel.world.block.Blocks;
+import org.joml.Vector2i;
 import org.joml.Vector3i;
 
 /**
@@ -11,18 +12,20 @@ import org.joml.Vector3i;
  */
 public class Chunk {
 
-    public static final int SIZE = 16;
+    public static final int SIZE_X = 16;
+    public static final int SIZE_Y = 128;
+    public static final int SIZE_Z = 16;
 
-    private Block[][][] blocks = new Block[SIZE][SIZE][SIZE];
+    private Block[][][] blocks = new Block[SIZE_X][SIZE_Y][SIZE_Z];
     private BakedChunk bakedChunk;
 
-    private Vector3i chunkPosition;
+    private Vector2i chunkPosition;
 
     private World world;
 
     private boolean hasToBake;
 
-    public Chunk(Block[][][] blocks, Vector3i chunkPosition, World world) {
+    public Chunk(Block[][][] blocks, Vector2i chunkPosition, World world) {
         this.blocks = blocks;
         this.chunkPosition = chunkPosition;
         this.world = world;
@@ -48,13 +51,14 @@ public class Chunk {
      * @return the block at specified coordinates
      */
     public Block getBlockAt(int x, int y, int z) {
-        if(x < 0 || x >= Chunk.SIZE || y < 0 || y >= Chunk.SIZE || z < 0 || z >= Chunk.SIZE)
-            return Blocks.AIR;
+        if(y >= Chunk.SIZE_Y) return Blocks.AIR;
+        if(x < 0 || x >= Chunk.SIZE_X || y < 0 || z < 0 || z >= Chunk.SIZE_Z)
+            return Blocks.STONE;
         return blocks[x][y][z];
     }
 
     public Vector3i toWorldCoordinates(Vector3i vector) {
-        return new Vector3i((chunkPosition.x * SIZE) + vector.x, (chunkPosition.y * SIZE) + vector.y, (chunkPosition.z * SIZE) + vector.z);
+        return new Vector3i((chunkPosition.x * SIZE_X) + vector.x, vector.y, (chunkPosition.y * SIZE_Z) + vector.z);
     }
 
     public BakedChunk getBakedChunk() {
@@ -70,7 +74,7 @@ public class Chunk {
         return world;
     }
 
-    public Vector3i getChunkPosition() {
+    public Vector2i getChunkPosition() {
         return chunkPosition;
     }
 
