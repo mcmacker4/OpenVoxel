@@ -66,10 +66,6 @@ public class Chunk {
         return bakedChunk;
     }
 
-    public void markForBaking() {
-        this.hasToBake = true;
-    }
-
     public World getWorld() {
         return world;
     }

@@ -11,10 +11,12 @@ uniform float ambientLight;
 
 void main(void) {
 
-    vec3 diffuse = texture(sampler, _texCoords).xyz;
+    //vec3 diffuse = texture(sampler, _texCoords).xyz;
 
-    float dotVal = max(dot(-lightDir, _normal), ambientLight);
+    //float dotVal = max(dot(-lightDir, _normal), ambientLight);
 
-    color = vec4(diffuse * dotVal, 1.0);
+    //color = vec4(diffuse * dotVal, 1.0);
+
+    color = vec4(_normal, 1.0);
 
 }

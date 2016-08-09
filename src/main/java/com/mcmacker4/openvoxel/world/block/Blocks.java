@@ -15,6 +15,7 @@ public class Blocks {
 
     static {
         if(!blocksRegistered) {
+            System.out.println("Registering blocks.");
             registerBlock(AIR = new Block(0, new int[] {-1, -1, -1, -1, -1, -1}));
             registerBlock(STONE = new Block(1, new int[] {1, 1, 1, 1, 1, 1}));
             registerBlock(DIRT = new Block(2, new int[] {2, 2, 2, 2, 2, 2}));

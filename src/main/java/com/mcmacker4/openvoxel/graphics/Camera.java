@@ -23,7 +23,7 @@ public class Camera {
     private Matrix4f projectionMatrix;
 
     public Camera(float fov) {
-        position = new Vector3f();
+        position = new Vector3f(0, 0, 2);
         rotation = new Vector3f();
         projectionMatrix = new Matrix4f().setPerspective((float) Math.toRadians(fov), Display.aspectRatio(), 0.1f, 1000f);
     }

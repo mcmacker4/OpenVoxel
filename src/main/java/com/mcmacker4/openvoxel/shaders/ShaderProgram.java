@@ -20,6 +20,7 @@ public abstract class ShaderProgram {
         int vShader = createShader(GL_VERTEX_SHADER, vSource);
         int fShader = createShader(GL_FRAGMENT_SHADER, fSource);
         program = glCreateProgram();
+        System.out.println("Creating shader program " + program + " from sources.");
         glAttachShader(program, vShader);
         glAttachShader(program, fShader);
         glLinkProgram(program);

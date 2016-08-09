@@ -2,15 +2,21 @@ package com.mcmacker4.openvoxel.graphics;
 
 import com.mcmacker4.openvoxel.shaders.ShaderProgram;
 import com.mcmacker4.openvoxel.shaders.WorldShader;
+import com.mcmacker4.openvoxel.texture.Texture;
 import com.mcmacker4.openvoxel.world.World;
 import com.mcmacker4.openvoxel.world.chunk.Chunk;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
+import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
+import static org.lwjgl.opengl.GL30.glVertexAttribIPointer;
 
 /**
  * Created by McMacker4 on 05/08/2016.
@@ -37,6 +43,8 @@ public class WorldRenderer {
         shader.loadViewMatrix(camera.getViewMatrix());
         shader.loadLightDir(world.getLightDir());
         shader.loadAmbientLight(world.getAmbientLight());
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, Texture.TERRAIN);
         world.getChunks().forEach(chunk -> {
             Vector3f pos = new Vector3f(
                     chunk.getChunkPosition().x * Chunk.SIZE_X,
@@ -47,26 +55,24 @@ public class WorldRenderer {
             BakedChunk baked = chunk.getBakedChunk();
             if(baked != null) {
                 glBindBuffer(GL_ARRAY_BUFFER, baked.vbos[0]);
-                glVertexPointer(3, GL_FLOAT, 0, 0);
-                glEnableClientState(GL_VERTEX_ARRAY);
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
                 glBindBuffer(GL_ARRAY_BUFFER, baked.vbos[1]);
-                glTexCoordPointer(2, GL_FLOAT, 0, 0);
-                glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
 
                 glBindBuffer(GL_ARRAY_BUFFER, baked.vbos[2]);
-                glNormalPointer(GL_FLOAT, 0, 0);
-                glEnableClientState(GL_NORMAL_ARRAY);
+                glEnableVertexAttribArray(2);
+                glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
 
-                glDrawArrays(GL_TRIANGLES, 0, baked.vertexCount);
-
+                glDisableVertexAttribArray(2);
+                glDisableVertexAttribArray(1);
+                glDisableVertexAttribArray(0);
                 glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-                glDisableClientState(GL_VERTEX_ARRAY);
-                glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-                glDisableClientState(GL_NORMAL_ARRAY);
             }
         });
+        glBindTexture(GL_TEXTURE_2D, 0);
         ShaderProgram.stop();
     }
 

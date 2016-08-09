@@ -30,7 +30,6 @@ public class BakedChunk {
             for(int y = 0; y < Chunk.SIZE_Y; y++) {
                 for(int z = 0; z < Chunk.SIZE_Z; z++) {
                     Block block = blocks[x][y][z];
-                    //If block is air, skip it.
                     if(block.getId() == Blocks.AIR.getId())
                         continue;
                     for(Orientation orientation : Orientation.values()) {
@@ -41,7 +40,6 @@ public class BakedChunk {
                         } else {
                             neighbour = chunk.getBlockAt(x + dir.x, y + dir.y, z + dir.z);
                         }
-                        //TODO: Check neighbour chunks for face culling.
                         if(neighbour.getId() == Blocks.AIR.getId()){
                             faces.add(new BlockFaceData(
                                     new Vector3i(x, y, z),
@@ -64,13 +62,14 @@ public class BakedChunk {
 
         vertexCount = vertices.size();
 
-        glGenBuffers(vbos);
+        vbos[0] = glGenBuffers();
+        vbos[1] = glGenBuffers();
+        vbos[2] = glGenBuffers();
+
         glBindBuffer(GL_ARRAY_BUFFER, vbos[0]);
         glBufferData(GL_ARRAY_BUFFER, BufferUtils.floatBuffer(toArray3(vertices)), GL_STATIC_DRAW);
-
         glBindBuffer(GL_ARRAY_BUFFER, vbos[1]);
         glBufferData(GL_ARRAY_BUFFER, BufferUtils.floatBuffer(toArray2(texCoords, true)), GL_STATIC_DRAW);
-
         glBindBuffer(GL_ARRAY_BUFFER, vbos[2]);
         glBufferData(GL_ARRAY_BUFFER, BufferUtils.floatBuffer(toArray3(normals)), GL_STATIC_DRAW);
 

@@ -20,6 +20,7 @@ public class Texture {
     public static int TERRAIN;
 
     public static void loadTextures() {
+        System.out.println("Loading textures.");
         TERRAIN = loadTexture("textures/terrain_good.png");
     }
 

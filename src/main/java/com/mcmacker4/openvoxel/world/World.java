@@ -23,8 +23,8 @@ public class World {
     private float ambientValue = 0.4f;
 
     public World() {
-        for(int i =  -CHUNKS_X / 2; i < CHUNKS_X / 2; i++) {
-            for(int k = -CHUNKS_Z / 2; k < CHUNKS_Z / 2; k++) {
+        for(int i = 0; i < CHUNKS_X; i++) {
+            for(int k = 0; k < CHUNKS_Z; k++) {
                 chunks.add(ChunkGenerator.generateChunk(new Vector2i(i, k), this));
             }
         }
