@@ -42,9 +42,9 @@ public class WorldRenderer {
         shader.loadLightDir(world.getLightDir());
         world.getChunks().forEach(chunk -> {
             Vector3f pos = new Vector3f(
-                    chunk.getChunkPosition().x * Chunk.SIZE,
-                    chunk.getChunkPosition().y * Chunk.SIZE,
-                    chunk.getChunkPosition().z * Chunk.SIZE
+                    chunk.getChunkPosition().x * Chunk.SIZE_X,
+                    0,
+                    chunk.getChunkPosition().y * Chunk.SIZE_Z
             );
             shader.loadModelMatrix(new Matrix4f().translate(pos.x, pos.y, pos.z));
             Model model = chunk.getBakedChunk().getModel();

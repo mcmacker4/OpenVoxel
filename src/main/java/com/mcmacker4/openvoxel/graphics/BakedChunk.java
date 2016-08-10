@@ -22,9 +22,9 @@ public class BakedChunk {
     public BakedChunk(Chunk chunk) {
         Block[][][] blocks = chunk.getBlocks();
         LinkedList<BlockFaceData> faces = new LinkedList<>();
-        for(int x = 0; x < Chunk.SIZE; x++) {
-            for(int y = 0; y < Chunk.SIZE; y++) {
-                for(int z = 0; z < Chunk.SIZE; z++) {
+        for(int x = 0; x < Chunk.SIZE_X; x++) {
+            for(int y = 0; y < Chunk.SIZE_Y; y++) {
+                for(int z = 0; z < Chunk.SIZE_Z; z++) {
                     Block block = blocks[x][y][z];
                     //If block is air, skip it.
                     if(block.getId() == Blocks.AIR.getId())
@@ -32,7 +32,7 @@ public class BakedChunk {
                     for(Orientation orientation : Orientation.values()) {
                         Vector3i dir = orientation.getDirection();
                         Block neighbour;
-                        if(x + dir.x < 0 || x + dir.x >= Chunk.SIZE || y + dir.y < 0 || y + dir.y >= Chunk.SIZE || z + dir.z < 0 || z + dir.z >= Chunk.SIZE) {
+                        if(x + dir.x < 0 || x + dir.x >= Chunk.SIZE_X || y + dir.y < 0 || y + dir.y >= Chunk.SIZE_Y || z + dir.z < 0 || z + dir.z >= Chunk.SIZE_Z) {
                             neighbour = chunk.getWorld().getBlockAt(chunk.toWorldCoordinates(new Vector3i(x, y, z).add(dir)));
                         } else {
                             neighbour = chunk.getBlockAt(x + dir.x, y + dir.y, z + dir.z);
