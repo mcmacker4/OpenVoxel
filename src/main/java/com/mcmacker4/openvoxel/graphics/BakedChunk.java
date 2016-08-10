@@ -1,7 +1,5 @@
 package com.mcmacker4.openvoxel.graphics;
 
-import com.mcmacker4.openvoxel.model.Model;
-import com.mcmacker4.openvoxel.model.ModelLoader;
 import com.mcmacker4.openvoxel.util.Orientation;
 import com.mcmacker4.openvoxel.world.block.Block;
 import com.mcmacker4.openvoxel.world.block.Blocks;
@@ -9,7 +7,11 @@ import com.mcmacker4.openvoxel.world.chunk.Chunk;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
+import org.lwjgl.system.MemoryUtil;
 
+import java.lang.reflect.Array;
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -17,11 +19,11 @@ import java.util.LinkedList;
  */
 public class BakedChunk {
 
-    private Model model;
+    private VertexBuffer[] buffers = new VertexBuffer[3];
 
     public BakedChunk(Chunk chunk) {
+        final ArrayList<BlockFaceData> faces = new ArrayList<>();
         Block[][][] blocks = chunk.getBlocks();
-        LinkedList<BlockFaceData> faces = new LinkedList<>();
         for(int x = 0; x < Chunk.SIZE_X; x++) {
             for(int y = 0; y < Chunk.SIZE_Y; y++) {
                 for(int z = 0; z < Chunk.SIZE_Z; z++) {
@@ -37,35 +39,63 @@ public class BakedChunk {
                         } else {
                             neighbour = chunk.getBlockAt(x + dir.x, y + dir.y, z + dir.z);
                         }
-                        //TODO: Check neighbour chunks for face culling.
                         if(neighbour.getId() == Blocks.AIR.getId()){
                             faces.add(new BlockFaceData(
                                     new Vector3i(x, y, z),
                                     orientation,
-                                    block.getTextureID(orientation))
-                            );
+                                    block.getTextureID(orientation)
+                            ));
                         }
                     }
                 }
             }
         }
+
         final LinkedList<Vector3f> vertices = new LinkedList<>();
         final LinkedList<Vector2f> texCoords = new LinkedList<>();
         final LinkedList<Vector3f> normals = new LinkedList<>();
+
         faces.forEach((face) -> {
             vertices.addAll(face.getVertices());
             texCoords.addAll(face.getTexCoords());
             normals.addAll(face.getNormals());
         });
-        model = ModelLoader.loadModel(vertices, texCoords, normals);
+
+        FloatBuffer verticesBuffer = MemoryUtil.memAllocFloat(vertices.size() * 3);
+        FloatBuffer texCoordsBuffer = MemoryUtil.memAllocFloat(texCoords.size() * 2);
+        FloatBuffer normalsBuffer = MemoryUtil.memAllocFloat(normals.size() * 3);
+
+        vertices.forEach((vertex) -> {
+            verticesBuffer.put(vertex.x);
+            verticesBuffer.put(vertex.y);
+            verticesBuffer.put(vertex.z);
+        });
+        verticesBuffer.flip();
+        texCoords.forEach((texCoord) -> {
+            texCoordsBuffer.put(texCoord.x);
+            texCoordsBuffer.put(texCoord.y);
+        });
+        texCoordsBuffer.flip();
+        normals.forEach((normal) -> {
+            normalsBuffer.put(normal.x);
+            normalsBuffer.put(normal.y);
+            normalsBuffer.put(normal.z);
+        });
+        normalsBuffer.flip();
+
+        buffers[0] = new VertexBuffer(verticesBuffer, 3);
+        buffers[1] = new VertexBuffer(texCoordsBuffer, 2);
+        buffers[2] = new VertexBuffer(normalsBuffer, 3);
+
     }
 
-    public Model getModel() {
-        return model;
+    public VertexBuffer[] getBuffers() {
+        return buffers;
     }
 
     public void delete() {
-        model.delete();
+        for(VertexBuffer buffer : buffers)
+            buffer.delete();
     }
 
 }
