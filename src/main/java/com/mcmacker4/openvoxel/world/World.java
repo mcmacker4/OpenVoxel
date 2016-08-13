@@ -15,7 +15,7 @@ import java.util.LinkedList;
  */
 public class World {
 
-    private static final int CHUNKS_X = 16, CHUNKS_Z = 16;
+    private static final int CHUNKS_X = 4, CHUNKS_Z = 4;
 
     private LinkedList<Chunk> chunks = new LinkedList<>();
 

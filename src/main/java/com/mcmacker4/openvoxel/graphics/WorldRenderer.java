@@ -51,17 +51,19 @@ public class WorldRenderer {
             shader.loadModelMatrix(new Matrix4f().translate(pos));
             BakedChunk baked = chunk.getBakedChunk();
             if(baked != null) {
-                VertexBuffer[] buffers = baked.getBuffers();
-                for(int i = 0; i < 3; i++) {
-                    buffers[i].bind();
-                    glVertexAttribPointer(i, buffers[i].getVertexSize(), GL_FLOAT, false, 0, 0);
-                    glEnableVertexAttribArray(i);
-                }
-                glDrawArrays(GL_TRIANGLES, 0, buffers[0].getVertexCount());
-                for(int i = 0; i < 3; i++) {
-                    buffers[i].unbind();
-                    glDisableVertexAttribArray(i);
-                }
+                VertexBuffer buffer = baked.getVbo();
+                buffer.bind();
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(0, 3, GL_FLOAT, false, 8 * 4, 0);
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer(1, 2, GL_FLOAT, false, 8 * 4, 3 * 4);
+                glEnableVertexAttribArray(2);
+                glVertexAttribPointer(2, 3, GL_FLOAT, false, 8 * 4, 5 * 4);
+                buffer.draw();
+                buffer.unbind();
+                glDisableVertexAttribArray(2);
+                glDisableVertexAttribArray(1);
+                glDisableVertexAttribArray(0);
             }
         });
         glBindTexture(GL_TEXTURE_2D, 0);

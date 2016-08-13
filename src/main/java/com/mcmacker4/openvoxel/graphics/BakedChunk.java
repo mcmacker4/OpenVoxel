@@ -9,9 +9,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.lwjgl.system.MemoryUtil;
 
-import java.lang.reflect.Array;
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -19,10 +17,12 @@ import java.util.LinkedList;
  */
 public class BakedChunk {
 
-    private VertexBuffer[] buffers = new VertexBuffer[3];
+    VertexBuffer vbo;
 
     public BakedChunk(Chunk chunk) {
-        final ArrayList<BlockFaceData> faces = new ArrayList<>();
+        final LinkedList<Vector3f> vertices = new LinkedList<>();
+        final LinkedList<Vector2f> texCoords = new LinkedList<>();
+        final LinkedList<Vector3f> normals = new LinkedList<>();
         Block[][][] blocks = chunk.getBlocks();
         for(int x = 0; x < Chunk.SIZE_X; x++) {
             for(int y = 0; y < Chunk.SIZE_Y; y++) {
@@ -40,62 +40,42 @@ public class BakedChunk {
                             neighbour = chunk.getBlockAt(x + dir.x, y + dir.y, z + dir.z);
                         }
                         if(neighbour.getId() == Blocks.AIR.getId()){
-                            faces.add(new BlockFaceData(
+                            BlockFaceData face = new BlockFaceData(
                                     new Vector3i(x, y, z),
                                     orientation,
                                     block.getTextureID(orientation)
-                            ));
+                            );
+                            vertices.addAll(face.getVertices());
+                            texCoords.addAll(face.getTexCoords());
+                            normals.addAll(face.getNormals());
                         }
                     }
                 }
             }
         }
 
-        final LinkedList<Vector3f> vertices = new LinkedList<>();
-        final LinkedList<Vector2f> texCoords = new LinkedList<>();
-        final LinkedList<Vector3f> normals = new LinkedList<>();
+        FloatBuffer buffer = MemoryUtil.memAllocFloat(vertices.size() * (3 + 2 + 3));
+        for(int i = 0; i < vertices.size(); i++) {
+            Vector3f vertex = vertices.get(i);
+            Vector2f texCoord = texCoords.get(i);
+            Vector3f normal = normals.get(i);
+            buffer.put(new float[] { vertex.x, vertex.y, vertex.z });
+            buffer.put(new float[] { texCoord.x, 1 - texCoord.y });
+            buffer.put(new float[] { normal.x, normal.y, normal.z });
+        }
 
-        faces.forEach((face) -> {
-            vertices.addAll(face.getVertices());
-            texCoords.addAll(face.getTexCoords());
-            normals.addAll(face.getNormals());
-        });
+        buffer.flip();
 
-        FloatBuffer verticesBuffer = MemoryUtil.memAllocFloat(vertices.size() * 3);
-        FloatBuffer texCoordsBuffer = MemoryUtil.memAllocFloat(texCoords.size() * 2);
-        FloatBuffer normalsBuffer = MemoryUtil.memAllocFloat(normals.size() * 3);
-
-        vertices.forEach((vertex) -> {
-            verticesBuffer.put(vertex.x);
-            verticesBuffer.put(vertex.y);
-            verticesBuffer.put(vertex.z);
-        });
-        verticesBuffer.flip();
-        texCoords.forEach((texCoord) -> {
-            texCoordsBuffer.put(texCoord.x);
-            texCoordsBuffer.put(texCoord.y);
-        });
-        texCoordsBuffer.flip();
-        normals.forEach((normal) -> {
-            normalsBuffer.put(normal.x);
-            normalsBuffer.put(normal.y);
-            normalsBuffer.put(normal.z);
-        });
-        normalsBuffer.flip();
-
-        buffers[0] = new VertexBuffer(verticesBuffer, 3);
-        buffers[1] = new VertexBuffer(texCoordsBuffer, 2);
-        buffers[2] = new VertexBuffer(normalsBuffer, 3);
+        vbo = new VertexBuffer(buffer, vertices.size());
 
     }
 
-    public VertexBuffer[] getBuffers() {
-        return buffers;
+    public VertexBuffer getVbo() {
+        return vbo;
     }
 
     public void delete() {
-        for(VertexBuffer buffer : buffers)
-            buffer.delete();
+        vbo.delete();
     }
 
 }
