@@ -31,9 +31,9 @@ public class Display {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+//        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+//        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+//        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
         window = glfwCreateWindow(width, height, title, NULL, NULL);
         if(window == 0)

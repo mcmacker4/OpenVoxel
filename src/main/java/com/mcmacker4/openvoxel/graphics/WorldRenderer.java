@@ -1,6 +1,5 @@
 package com.mcmacker4.openvoxel.graphics;
 
-import com.mcmacker4.openvoxel.model.Model;
 import com.mcmacker4.openvoxel.shaders.ShaderProgram;
 import com.mcmacker4.openvoxel.shaders.WorldShader;
 import com.mcmacker4.openvoxel.texture.Texture;
@@ -14,6 +13,7 @@ import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 /**
@@ -40,26 +40,33 @@ public class WorldRenderer {
         shader.loadProjectionMatrix(camera.getProjectionMatrix());
         shader.loadViewMatrix(camera.getViewMatrix());
         shader.loadLightDir(world.getLightDir());
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, Texture.TERRAIN);
         world.getChunks().forEach(chunk -> {
             Vector3f pos = new Vector3f(
-                    chunk.getChunkPosition().x * Chunk.SIZE,
-                    chunk.getChunkPosition().y * Chunk.SIZE,
-                    chunk.getChunkPosition().z * Chunk.SIZE
+                    chunk.getChunkPosition().x * Chunk.SIZE_X,
+                    0,
+                    chunk.getChunkPosition().y * Chunk.SIZE_Z
             );
-            shader.loadModelMatrix(new Matrix4f().translate(pos.x, pos.y, pos.z));
-            Model model = chunk.getBakedChunk().getModel();
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, Texture.TERRAIN);
-            glBindVertexArray(model.getVao());
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
-            glDrawArrays(GL_TRIANGLES, 0, model.getVertexCount());
-            glBindTexture(GL_TEXTURE_2D, 0);
-            glDisableVertexAttribArray(0);
-            glDisableVertexAttribArray(1);
-            glDisableVertexAttribArray(2);
+            shader.loadModelMatrix(new Matrix4f().translate(pos));
+            BakedChunk baked = chunk.getBakedChunk();
+            if(baked != null) {
+                VertexBuffer buffer = baked.getVbo();
+                buffer.bind();
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(0, 3, GL_FLOAT, false, 8 * 4, 0);
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer(1, 2, GL_FLOAT, false, 8 * 4, 3 * 4);
+                glEnableVertexAttribArray(2);
+                glVertexAttribPointer(2, 3, GL_FLOAT, false, 8 * 4, 5 * 4);
+                buffer.draw();
+                buffer.unbind();
+                glDisableVertexAttribArray(2);
+                glDisableVertexAttribArray(1);
+                glDisableVertexAttribArray(0);
+            }
         });
+        glBindTexture(GL_TEXTURE_2D, 0);
         glBindVertexArray(0);
         ShaderProgram.stop();
     }
